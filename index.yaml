@@ -1,0 +1,13 @@
+apiVersion: v1
+entries:
+  recurse-center-tweet-listener:
+  - apiVersion: v1
+    appVersion: 0.0.1
+    created: "2020-02-13T06:53:43.952133397Z"
+    description: A Helm chart for Kubernetes
+    digest: 659252160f2fd2c717dd900f908c337cb91f7fb2e687ad94d527f41bde7b94cd
+    name: recurse-center-tweet-listener
+    urls:
+    - https://github.com/imnotjames/recurse-center-tweet-listener/releases/download/recurse-center-tweet-listener-0.0.1/recurse-center-tweet-listener-0.0.1.tgz
+    version: 0.0.1
+generated: "2020-02-13T06:53:43.859382922Z"
