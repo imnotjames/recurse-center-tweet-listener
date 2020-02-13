@@ -1,4 +1,4 @@
-apiVersion: v2
+apiVersion: v1
 name: recurse-center-tweet-listener
 description: A Helm chart for Kubernetes
 
