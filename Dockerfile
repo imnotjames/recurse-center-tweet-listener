@@ -14,9 +14,9 @@ ENV ELASTICSEARCH_DOCTYPE="tweet"
 
 WORKDIR /app
 
-ADD recurse_center_tweet_listener requirements.txt ./
+ADD recurse_center_tweet_listener/ ./recurse_center_tweet_listener/
+ADD requirements.txt ./
 
 RUN pip install -r requirements.txt
 
-ENTRYPOINT [ "python" ]
-CMD [ "-m", "recurse_center_tweet_listener" ]
+CMD [ "python", "-m", "recurse_center_tweet_listener" ]
