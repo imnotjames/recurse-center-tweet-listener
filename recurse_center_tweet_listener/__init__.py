@@ -80,6 +80,7 @@ class LoggingStreamListener(LambdaStreamListener):
 class ElasticsearchIndexingStreamListener(LambdaStreamListener):
     def __init__(self, client, index, doctype):
         super().__init__(lambda body: client.index(
+            id=body['tweet_id'],
             index=index,
             doc_type=doctype,
             body=body
