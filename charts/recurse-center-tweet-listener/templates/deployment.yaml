@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "recurse-center-tweet-listener.fullname" . }}
+  labels:
+    {{- include "recurse-center-tweet-listener.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "recurse-center-tweet-listener.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "recurse-center-tweet-listener.selectorLabels" . | nindent 8 }}
+    spec:
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: TWITTER_CONSUMER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "recurse-center-tweet-listener.fullname" . }}
+                  key: twitter-consumer-key
+
+            - name: TWITTER_CONSUMER_KEY_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "recurse-center-tweet-listener.fullname" . }}
+                  key: twitter-consumer-key-secret
+
+            - name: TWITTER_ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "recurse-center-tweet-listener.fullname" . }}
+                  key: twitter-access-token
+
+            - name: TWITTER_ACCESS_TOKEN_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "recurse-center-tweet-listener.fullname" . }}
+                  key: twitter-access-token-secret
+
+            {{- with .Values.application.twitter.terms }}
+            - name: TWITTER_TERMS
+              value: {{ include "recurse-center-tweet-listener.joinListWithComma" . | quote }}
+            {{- end }}
+            {{- with .Values.application.elasticsearch.hosts }}
+            - name: ELASTICSEARCH_HOSTS
+              value: {{ include "recurse-center-tweet-listener.joinListWithComma" . | quote }}
+            {{- end }}
+            {{- with .Values.application.elasticsearch.index }}
+            - name: ELASTICSEARCH_INDEX
+              value: {{ . | quote }}
+            {{- end }}
+            {{- with .Values.application.elasticsearch.doctype }}
+            - name: ELASTICSEARCH_DOCTYPE
+              value: {{ . | quote }}
+            {{- end }}
+
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
