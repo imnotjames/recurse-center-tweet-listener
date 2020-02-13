@@ -14,7 +14,7 @@ from recurse_center_tweet_listener import ElasticsearchIndexingStreamListener, L
 
 if __name__ == '__main__':
     logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
-    logging.getLogger().setLevel(logging.DEBUG)
+    logging.getLogger().setLevel(os.environ.get('LOGGING_LEVEL', logging.INFO))
 
     twitter_consumer_key = os.environ['TWITTER_CONSUMER_KEY']
     twitter_consumer_key_secret = os.environ['TWITTER_CONSUMER_KEY_SECRET']
